@@ -1,221 +1,1516 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Kelola PMB - Bidan Digital</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f8f9fa;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SiPMB – Sistem Informasi Praktik Mandiri Bidan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+/* ── ROOT & RESET ─────────────────────────────────── */
+:root {
+  --teal:       #1D9E75;
+  --teal-d:     #0F6E56;
+  --teal-dd:    #085041;
+  --teal-l:     #E1F5EE;
+  --teal-m:     #9FE1CB;
+  --blue:       #378ADD;
+  --blue-l:     #E6F1FB;
+  --amber:      #EF9F27;
+  --amber-l:    #FAEEDA;
+  --red:        #E24B4A;
+  --red-l:      #FCEBEB;
+  --purple:     #7F77DD;
+  --purple-l:   #EEEDFE;
+  --gray-50:    #F8F9FA;
+  --gray-100:   #F1F3F4;
+  --gray-200:   #E8EAED;
+  --gray-400:   #9AA0A6;
+  --gray-600:   #5F6368;
+  --gray-800:   #3C4043;
+  --gray-900:   #202124;
+  --white:      #FFFFFF;
+  --sidebar-w:  230px;
+  --topbar-h:   56px;
+  --radius:     10px;
+  --radius-lg:  14px;
+  --shadow:     0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:  0 4px 12px rgba(0,0,0,.10);
+  --font:       'Plus Jakarta Sans', sans-serif;
+  --transition: all .18s ease;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; font-family: var(--font); font-size: 14px; color: var(--gray-900); background: var(--gray-50); }
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; border: none; background: none; font-family: var(--font); }
+input, select, textarea { font-family: var(--font); font-size: 13.5px; }
+table { border-collapse: collapse; width: 100%; }
+img { display: block; }
 
-        .sidebar {
-            height: 100vh;
-            background: #2c3e50;
-            color: white;
-            position: fixed;
-            width: 250px;
-            padding-top: 20px;
-        }
+/* ── SCROLLBAR ─────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 99px; }
 
-        .sidebar a {
-            color: white;
-            text-decoration: none;
-            padding: 15px 25px;
-            display: block;
-            transition: 0.3s;
-        }
+/* ── LAYOUT ────────────────────────────────────────── */
+#app        { display: flex; height: 100vh; overflow: hidden; }
+#sidebar    { width: var(--sidebar-w); height: 100vh; background: var(--white); border-right: 1px solid var(--gray-200); display: flex; flex-direction: column; flex-shrink: 0; overflow-y: auto; transition: var(--transition); z-index: 100; }
+#main-wrap  { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+#topbar     { height: var(--topbar-h); background: var(--white); border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; padding: 0 1.5rem; gap: 12px; flex-shrink: 0; }
+#content    { flex: 1; overflow-y: auto; padding: 1.5rem; }
 
-        .sidebar a:hover {
-            background: #34495e;
-            border-left: 4px solid #1abc9c;
-        }
+/* ── SIDEBAR ────────────────────────────────────────── */
+.sidebar-logo { padding: 1rem 1.25rem .75rem; border-bottom: 1px solid var(--gray-100); display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.logo-icon { width: 34px; height: 34px; border-radius: 9px; background: var(--teal); display: grid; place-items: center; color: #fff; font-size: 15px; flex-shrink: 0; }
+.logo-text  { font-weight: 600; font-size: 14px; line-height: 1.2; color: var(--gray-900); }
+.logo-sub   { font-size: 10px; color: var(--gray-400); }
 
-        .main-content {
-            margin-left: 250px;
-            padding: 30px;
-        }
+.nav-section { padding: .65rem 1.25rem .2rem; font-size: 9.5px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--gray-400); }
+.nav-item { display: flex; align-items: center; gap: 9px; padding: 8px 1.25rem; font-size: 13px; color: var(--gray-600); cursor: pointer; border-left: 2.5px solid transparent; transition: var(--transition); user-select: none; }
+.nav-item:hover { background: var(--gray-50); color: var(--gray-900); }
+.nav-item.active { color: var(--teal-d); background: var(--teal-l); border-left-color: var(--teal); font-weight: 600; }
+.nav-item i { width: 16px; text-align: center; font-size: 14px; flex-shrink: 0; }
+.nav-badge { margin-left: auto; background: var(--teal); color: #fff; font-size: 10px; font-weight: 600; padding: 1px 7px; border-radius: 99px; }
+.nav-badge.orange { background: var(--amber); }
 
-        .card-stat {
-            border: none;
-            border-radius: 10px;
-            transition: transform 0.2s;
-        }
+.sidebar-footer { margin-top: auto; padding: 1rem 1.25rem; border-top: 1px solid var(--gray-100); display: flex; align-items: center; gap: 9px; }
+.avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--teal-l); color: var(--teal-d); font-size: 12px; font-weight: 600; display: grid; place-items: center; flex-shrink: 0; }
+.avatar-name { font-size: 12.5px; font-weight: 600; color: var(--gray-900); }
+.avatar-role { font-size: 10.5px; color: var(--gray-400); }
+.btn-logout { margin-left: auto; color: var(--gray-400); font-size: 15px; padding: 4px; border-radius: 6px; transition: var(--transition); }
+.btn-logout:hover { color: var(--red); background: var(--red-l); }
 
-        .card-stat:hover {
-            transform: translateY(-5px);
-        }
+/* ── TOPBAR ─────────────────────────────────────────── */
+.topbar-menu  { font-size: 20px; color: var(--gray-600); padding: 6px; border-radius: 7px; cursor: pointer; display: none; }
+.topbar-title { font-size: 15px; font-weight: 600; color: var(--gray-900); }
+.topbar-date  { font-size: 12px; color: var(--gray-400); margin-left: 4px; }
+.topbar-right { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+.icon-btn { width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--gray-200); background: var(--white); color: var(--gray-600); font-size: 15px; display: grid; place-items: center; cursor: pointer; position: relative; transition: var(--transition); }
+.icon-btn:hover { background: var(--gray-50); }
+.notif-dot { position: absolute; top: 6px; right: 7px; width: 6px; height: 6px; background: var(--red); border-radius: 50%; border: 1.5px solid #fff; }
+.btn-primary { display: flex; align-items: center; gap: 6px; padding: 7px 14px; background: var(--teal); color: #fff; border-radius: 8px; font-size: 13px; font-weight: 600; transition: var(--transition); white-space: nowrap; }
+.btn-primary:hover { background: var(--teal-d); }
+.btn-primary i { font-size: 13px; }
 
-        .btn-primary {
-            background-color: #1abc9c;
-            border: none;
-        }
+/* ── PAGE SECTIONS ──────────────────────────────────── */
+.page { display: none; animation: fadeIn .2s ease; }
+.page.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
-        .btn-primary:hover {
-            background-color: #16a085;
-        }
-    </style>
+/* ── STATS GRID ─────────────────────────────────────── */
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 1.25rem; }
+.stat-card  { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: 1rem 1.25rem; }
+.stat-label { font-size: 11px; color: var(--gray-400); margin-bottom: 6px; font-weight: 500; }
+.stat-value { font-size: 26px; font-weight: 600; color: var(--gray-900); line-height: 1; }
+.stat-sub   { font-size: 11px; margin-top: 6px; }
+.stat-up    { color: var(--teal); }
+.stat-warn  { color: var(--amber); }
+.stat-danger{ color: var(--red); }
+
+/* ── CARD ───────────────────────────────────────────── */
+.card { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: 1.1rem 1.25rem; }
+.card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: .9rem; }
+.card-title  { font-size: 13px; font-weight: 600; color: var(--gray-900); display: flex; align-items: center; gap: 7px; }
+.card-title i { color: var(--teal); font-size: 14px; }
+.card-link   { font-size: 12px; color: var(--teal); cursor: pointer; font-weight: 500; }
+.card-link:hover { text-decoration: underline; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1.25rem; }
+
+/* ── ANTRIAN LIST ────────────────────────────────────── */
+.antrian-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--gray-100); }
+.antrian-row:last-child { border-bottom: none; }
+.antrian-num { width: 26px; height: 26px; border-radius: 50%; background: var(--teal-l); color: var(--teal-d); font-size: 11px; font-weight: 600; display: grid; place-items: center; flex-shrink: 0; }
+.antrian-info { flex: 1; min-width: 0; }
+.antrian-name { font-size: 12.5px; font-weight: 600; color: var(--gray-900); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.antrian-type { font-size: 11px; color: var(--gray-400); margin-top: 1px; }
+.antrian-time { font-size: 11px; color: var(--gray-400); flex-shrink: 0; }
+.pill { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 99px; font-weight: 600; }
+.pill-anc    { background: var(--teal-l);   color: var(--teal-dd); }
+.pill-kb     { background: var(--blue-l);   color: #0C447C; }
+.pill-imun   { background: var(--amber-l);  color: #633806; }
+.pill-pnc    { background: var(--purple-l); color: #26215C; }
+.pill-lahir  { background: var(--red-l);    color: #501313; }
+.pill-umum   { background: var(--gray-100); color: var(--gray-600); }
+
+/* ── NOTIF LIST ─────────────────────────────────────── */
+.notif-row { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--gray-100); }
+.notif-row:last-child { border-bottom: none; }
+.notif-icon { width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center; font-size: 13px; flex-shrink: 0; }
+.notif-warn  { background: var(--amber-l); color: #854F0B; }
+.notif-danger{ background: var(--red-l);   color: #A32D2D; }
+.notif-info  { background: var(--blue-l);  color: #185FA5; }
+.notif-title { font-size: 12.5px; font-weight: 600; color: var(--gray-900); }
+.notif-desc  { font-size: 11px; color: var(--gray-400); }
+
+/* ── BAR CHART ──────────────────────────────────────── */
+.chart-bars { display: flex; align-items: flex-end; gap: 6px; height: 80px; margin-top: 10px; }
+.bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.bar { width: 100%; border-radius: 3px 3px 0 0; background: var(--teal-m); min-height: 4px; transition: height .3s ease; }
+.bar.active { background: var(--teal); }
+.bar-lbl { font-size: 9.5px; color: var(--gray-400); }
+.bar-val { font-size: 9px; color: var(--gray-600); font-weight: 600; }
+
+/* ── TABLE ──────────────────────────────────────────── */
+.table-wrap { overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--gray-200); }
+.tbl { min-width: 600px; }
+.tbl thead tr { background: var(--gray-50); }
+.tbl th { padding: 9px 14px; text-align: left; font-size: 11.5px; font-weight: 600; color: var(--gray-600); border-bottom: 1px solid var(--gray-200); white-space: nowrap; }
+.tbl td { padding: 10px 14px; font-size: 13px; color: var(--gray-800); border-bottom: 1px solid var(--gray-100); }
+.tbl tbody tr:last-child td { border-bottom: none; }
+.tbl tbody tr:hover td { background: var(--gray-50); }
+
+/* ── SEARCH / FILTER BAR ─────────────────────────────── */
+.filter-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 1rem; flex-wrap: wrap; }
+.search-box { display: flex; align-items: center; gap: 7px; background: var(--white); border: 1px solid var(--gray-200); border-radius: 8px; padding: 7px 12px; flex: 1; min-width: 180px; max-width: 320px; }
+.search-box i { color: var(--gray-400); font-size: 14px; }
+.search-box input { border: none; outline: none; background: none; font-size: 13px; width: 100%; color: var(--gray-900); }
+.search-box input::placeholder { color: var(--gray-400); }
+.sel { padding: 7px 10px; border: 1px solid var(--gray-200); border-radius: 8px; background: var(--white); color: var(--gray-700); font-size: 13px; outline: none; }
+
+/* ── FORM / MODAL ────────────────────────────────────── */
+.overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.35); z-index: 200; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
+.overlay.open { display: flex; }
+.modal { background: var(--white); border-radius: var(--radius-lg); width: 540px; max-width: 94vw; max-height: 90vh; display: flex; flex-direction: column; box-shadow: var(--shadow-md); }
+.modal-head { padding: 1rem 1.25rem; border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+.modal-title { font-size: 15px; font-weight: 600; color: var(--gray-900); }
+.modal-close { width: 30px; height: 30px; border-radius: 7px; color: var(--gray-400); font-size: 16px; display: grid; place-items: center; cursor: pointer; transition: var(--transition); }
+.modal-close:hover { background: var(--gray-100); color: var(--gray-900); }
+.modal-body { padding: 1.25rem; overflow-y: auto; }
+.modal-foot { padding: .9rem 1.25rem; border-top: 1px solid var(--gray-100); display: flex; justify-content: flex-end; gap: 8px; flex-shrink: 0; }
+
+.form-grid  { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-full  { grid-column: 1 / -1; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-label { font-size: 12px; font-weight: 600; color: var(--gray-600); }
+.form-input { padding: 8px 10px; border: 1px solid var(--gray-200); border-radius: 8px; font-size: 13px; outline: none; transition: var(--transition); color: var(--gray-900); background: var(--white); }
+.form-input:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(29,158,117,.12); }
+.form-input::placeholder { color: var(--gray-400); }
+select.form-input { cursor: pointer; }
+
+.btn-sec  { padding: 7px 14px; border: 1px solid var(--gray-200); border-radius: 8px; font-size: 13px; font-weight: 500; color: var(--gray-600); background: var(--white); transition: var(--transition); }
+.btn-sec:hover { background: var(--gray-50); }
+.btn-save { padding: 7px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #fff; background: var(--teal); transition: var(--transition); }
+.btn-save:hover { background: var(--teal-d); }
+.btn-danger { padding: 7px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #fff; background: var(--red); transition: var(--transition); }
+.btn-danger:hover { background: #A32D2D; }
+
+/* ── LOGIN ───────────────────────────────────────────── */
+#login-page { position: fixed; inset: 0; background: linear-gradient(135deg, var(--teal-l) 0%, var(--white) 60%); display: flex; align-items: center; justify-content: center; z-index: 999; }
+.login-box { background: var(--white); border-radius: var(--radius-lg); padding: 2.5rem 2rem; width: 360px; box-shadow: var(--shadow-md); text-align: center; }
+.login-logo { width: 52px; height: 52px; border-radius: 14px; background: var(--teal); display: grid; place-items: center; color: #fff; font-size: 22px; margin: 0 auto 1rem; }
+.login-title { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--gray-900); margin-bottom: 4px; }
+.login-sub   { font-size: 13px; color: var(--gray-400); margin-bottom: 1.75rem; }
+.login-group { text-align: left; margin-bottom: 12px; }
+.login-label { font-size: 12px; font-weight: 600; color: var(--gray-600); display: block; margin-bottom: 5px; }
+.login-input { width: 100%; padding: 9px 12px; border: 1px solid var(--gray-200); border-radius: 9px; font-size: 14px; outline: none; transition: var(--transition); }
+.login-input:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(29,158,117,.12); }
+.btn-login { width: 100%; padding: 10px; background: var(--teal); color: #fff; border-radius: 9px; font-size: 14px; font-weight: 600; margin-top: .5rem; transition: var(--transition); }
+.btn-login:hover { background: var(--teal-d); }
+.login-err { font-size: 12px; color: var(--red); margin-top: 8px; min-height: 16px; }
+
+/* ── TOAST ───────────────────────────────────────────── */
+#toast { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 999; display: flex; flex-direction: column; gap: 8px; }
+.toast-item { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 10px; background: var(--gray-900); color: #fff; font-size: 13px; font-weight: 500; box-shadow: var(--shadow-md); animation: slideUp .25s ease; min-width: 220px; }
+.toast-item.success { background: var(--teal-d); }
+.toast-item.error   { background: #A32D2D; }
+@keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ── QUICK ACTIONS ───────────────────────────────────── */
+.qa-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 1.25rem; }
+.qa-btn { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: .9rem .75rem; display: flex; flex-direction: column; align-items: center; gap: 7px; cursor: pointer; transition: var(--transition); }
+.qa-btn:hover { background: var(--teal-l); border-color: var(--teal-m); transform: translateY(-1px); }
+.qa-icon { width: 38px; height: 38px; border-radius: 9px; display: grid; place-items: center; font-size: 16px; }
+.qa-label { font-size: 11.5px; font-weight: 600; color: var(--gray-600); text-align: center; }
+
+/* ── EMPTY STATE ─────────────────────────────────────── */
+.empty { text-align: center; padding: 2.5rem 1rem; color: var(--gray-400); }
+.empty i { font-size: 32px; margin-bottom: .75rem; display: block; }
+.empty p { font-size: 13px; }
+
+/* ── STATUS BADGE ────────────────────────────────────── */
+.status { display: inline-block; font-size: 10.5px; font-weight: 600; padding: 2px 9px; border-radius: 99px; }
+.status-menunggu { background: var(--amber-l); color: #633806; }
+.status-proses   { background: var(--blue-l);  color: #0C447C; }
+.status-selesai  { background: var(--teal-l);  color: var(--teal-dd); }
+.status-aktif    { background: var(--teal-l);  color: var(--teal-dd); }
+.status-nonaktif { background: var(--gray-100); color: var(--gray-600); }
+.status-lunas    { background: var(--teal-l);  color: var(--teal-dd); }
+.status-menipis  { background: var(--red-l);   color: #791F1F; }
+.status-bpjs     { background: var(--blue-l);  color: #185FA5; }
+
+/* ── PAGE HEADER ─────────────────────────────────────── */
+.page-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 10px; }
+.page-hdr h2 { font-size: 18px; font-weight: 600; color: var(--gray-900); }
+.page-hdr p  { font-size: 12px; color: var(--gray-400); margin-top: 2px; }
+
+/* ── LAPORAN ─────────────────────────────────────────── */
+.lap-stat { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.25rem; }
+.lap-card { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: 1rem; text-align: center; }
+.lap-val  { font-size: 28px; font-weight: 600; color: var(--teal-d); }
+.lap-lbl  { font-size: 11px; color: var(--gray-400); margin-top: 4px; }
+
+/* ── SPINNER ─────────────────────────────────────────── */
+.spinner { display: inline-block; width: 18px; height: 18px; border: 2.5px solid var(--teal-m); border-top-color: var(--teal); border-radius: 50%; animation: spin .6s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── MOBILE ──────────────────────────────────────────── */
+@media (max-width: 768px) {
+  #sidebar { position: fixed; left: -100%; transition: left .25s ease; }
+  #sidebar.open { left: 0; }
+  .topbar-menu { display: block; }
+  .two-col  { grid-template-columns: 1fr; }
+  .qa-grid  { grid-template-columns: repeat(2, 1fr); }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .form-grid { grid-template-columns: 1fr; }
+  .lap-stat { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  #content { padding: 1rem .75rem; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
 </head>
-
 <body>
 
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <h4 class="text-center mb-4">PMB Digital</h4>
-        <a href="#" onclick="showSection('dashboard')">Dashboard UTAMI</a>
-        <a href="#" onclick="showSection('pendaftaran')">Pendaftaran Pasien</a>
-        <a href="#" onclick="showSection('layanan')">Input Layanan</a>
-        <a href="#" onclick="showSection('stok')">Stok Obat</a>
-        <a href="#" onclick="showSection('laporan')">Laporan Harian</a>
-        <a href="/pasien">pasien</a>
+<!-- ══ LOGIN ══════════════════════════════════════════════ -->
+<div id="login-page">
+  <div class="login-box">
+    <div class="login-logo"><i class="fa-solid fa-heart-pulse"></i></div>
+    <div class="login-title">SiPMB</div>
+    <div class="login-sub">Sistem Informasi Praktik Mandiri Bidan</div>
+    <div class="login-group">
+      <label class="login-label">Username</label>
+      <input id="inp-user" class="login-input" type="text" placeholder="Masukkan username" value="admin">
+    </div>
+    <div class="login-group">
+      <label class="login-label">Password</label>
+      <input id="inp-pass" class="login-input" type="password" placeholder="Masukkan password" value="admin123">
+    </div>
+    <button class="btn-login" onclick="doLogin()">Masuk</button>
+    <div class="login-err" id="login-err"></div>
+    <div style="font-size:11px;color:var(--gray-400);margin-top:1rem;">Default: admin / admin123 &nbsp;|&nbsp; bidan / bidan123</div>
+  </div>
+</div>
+
+<!-- ══ APP ══════════════════════════════════════════════ -->
+<div id="app" style="display:none;">
+  <!-- SIDEBAR -->
+  <nav id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon"><i class="fa-solid fa-heart-pulse"></i></div>
+      <div><div class="logo-text">SiPMB</div><div class="logo-sub">Praktik Mandiri Bidan</div></div>
     </div>
 
-    <!-- Main Content -->
-    <div class="main-content">
+    <div class="nav-section">Utama</div>
+    <div class="nav-item active" onclick="showPage('dashboard',this)"><i class="fa-solid fa-gauge-high"></i> Dashboard</div>
+    <div class="nav-item" onclick="showPage('antrian',this)" id="nav-antrian"><i class="fa-solid fa-list-ol"></i> Jadwal & Antrian <span class="nav-badge" id="badge-antrian">0</span></div>
+    <div class="nav-item" onclick="showPage('pasien',this)"><i class="fa-solid fa-users"></i> Data Pasien</div>
 
-        <!-- Dashboard Section -->
-        <div id="dashboard" class="content-section">
-            <h2 class="mb-4">Dashboard Utama</h2>
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="card card-stat bg-primary text-white mb-3">
-                        <div class="card-body">
-                            <h6 class="card-title">Pasien Hari Ini</h6>
-                            <h2 id="count-pasien">0</h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card card-stat bg-success text-white mb-3">
-                        <div class="card-body">
-                            <h6 class="card-title">Kunjungan KB</h6>
-                            <h2 id="count-kb">0</h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card card-stat bg-warning text-dark mb-3">
-                        <div class="card-body">
-                            <h6 class="card-title">Stok Menipis</h6>
-                            <h2 id="count-stok">0</h2>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="nav-section">Pelayanan</div>
+    <div class="nav-item" onclick="showPage('anc',this)"><i class="fa-solid fa-baby-carriage"></i> Antenatal (ANC)</div>
+    <div class="nav-item" onclick="showPage('persalinan',this)"><i class="fa-solid fa-heart-pulse"></i> Persalinan</div>
+    <div class="nav-item" onclick="showPage('pnc',this)"><i class="fa-solid fa-seedling"></i> Postnatal (PNC)</div>
+    <div class="nav-item" onclick="showPage('kb',this)"><i class="fa-solid fa-venus"></i> KB</div>
+    <div class="nav-item" onclick="showPage('imunisasi',this)" id="nav-imun"><i class="fa-solid fa-syringe"></i> Imunisasi <span class="nav-badge orange" id="badge-imun">0</span></div>
 
-        <!-- Pendaftaran Section -->
-        <div id="pendaftaran" class="content-section" style="display:none;">
-            <h2 class="mb-4">Pendaftaran Pasien Baru</h2>
-            <div class="card p-4 shadow-sm">
-                <form id="form-pasien">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">NIK Pasien</label>
-                            <input type="text" id="nik" class="form-control" required
-                                placeholder="Masukkan 16 digit NIK">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Nama Lengkap</label>
-                            <input type="text" id="nama" class="form-control" required>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Tanggal Lahir</label>
-                            <input type="date" id="tgl_lahir" class="form-control" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">No. WhatsApp</label>
-                            <input type="tel" id="wa" class="form-control" placeholder="08xxxx">
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100">Simpan Data Pasien</button>
-                </form>
-            </div>
-        </div>
+    <div class="nav-section">Operasional</div>
+    <div class="nav-item" onclick="showPage('stok',this)"><i class="fa-solid fa-pills"></i> Obat & Stok</div>
+    <div class="nav-item" onclick="showPage('keuangan',this)"><i class="fa-solid fa-receipt"></i> Keuangan</div>
+    <div class="nav-item" onclick="showPage('laporan',this)"><i class="fa-solid fa-chart-line"></i> Laporan</div>
 
-        <!-- Placeholder for other sections -->
-        <div id="layanan" class="content-section" style="display:none;">
-            <h2>Input Layanan Medis</h2>
-            <p>Fitur untuk mencatat ANC, Persalinan, atau KB akan muncul di sini.</p>
-        </div>
+    <div class="nav-section">Sistem</div>
+    <div class="nav-item" onclick="showPage('pengaturan',this)"><i class="fa-solid fa-gear"></i> Pengaturan</div>
 
-        <div id="stok" class="content-section" style="display:none;">
-            <h2>Data Stok Obat</h2>
-            <div class="table-responsive">
-                <table class="table table-hover mt-3">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>ID</th>
-                            <th>Nama Obat</th>
-                            <th>Stok</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tabel-obat">
-                        <!-- Data dari Apps Script akan masuk di sini -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
+    <div class="sidebar-footer">
+      <div class="avatar" id="user-avatar">AD</div>
+      <div><div class="avatar-name" id="user-name">Admin</div><div class="avatar-role" id="user-role">Administrator</div></div>
+      <button class="btn-logout" onclick="doLogout()" title="Keluar"><i class="fa-solid fa-right-from-bracket"></i></button>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <div id="main-wrap">
+    <div id="topbar">
+      <button class="topbar-menu" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+      <div>
+        <div class="topbar-title" id="page-title">Dashboard</div>
+        <div class="topbar-date" id="page-date"></div>
+      </div>
+      <div class="topbar-right">
+        <button class="icon-btn" title="Notifikasi" onclick="showPage('dashboard',document.querySelector('.nav-item'))">
+          <i class="fa-solid fa-bell"></i><span class="notif-dot" id="notif-dot" style="display:none"></span>
+        </button>
+        <button class="btn-primary" id="topbar-action" onclick="topbarAction()">
+          <i class="fa-solid fa-plus"></i> <span id="topbar-action-label">Pasien Baru</span>
+        </button>
+      </div>
     </div>
 
-    <script>
-        // Ganti dengan URL Web App dari Google Apps Script Anda nanti
-        const APPS_SCRIPT_URL = "URL_APPS_SCRIPT_ANDA_DI_SINI";
+    <div id="content">
 
-        function showSection(id) {
-            document.querySelectorAll('.content-section').forEach(s => s.style.display = 'none');
-            document.getElementById(id).style.display = 'block';
-        }
+      <!-- ─── DASHBOARD ─── -->
+      <div id="page-dashboard" class="page active">
+        <div class="stats-grid" id="stats-grid">
+          <div class="stat-card"><div class="stat-label">Kunjungan Hari Ini</div><div class="stat-value" id="st-kunjungan">–</div><div class="stat-sub stat-up" id="st-kunjungan-sub"></div></div>
+          <div class="stat-card"><div class="stat-label">Total Pasien</div><div class="stat-value" id="st-pasien">–</div><div class="stat-sub stat-up"></div></div>
+          <div class="stat-card"><div class="stat-label">Ibu Hamil Aktif</div><div class="stat-value" id="st-hamil">–</div><div class="stat-sub stat-up"></div></div>
+          <div class="stat-card"><div class="stat-label">Akseptor KB</div><div class="stat-value" id="st-kb">–</div><div class="stat-sub stat-warn" id="st-kb-sub"></div></div>
+        </div>
 
-        document.getElementById('form-pasien').addEventListener('submit', function (e) {
-            e.preventDefault();
-            const btn = e.target.querySelector('button');
-            btn.disabled = true;
-            btn.innerText = "Mengirim...";
+        <div class="qa-grid">
+          <div class="qa-btn" onclick="showPage('anc',document.querySelectorAll('.nav-item')[4])">
+            <div class="qa-icon" style="background:var(--teal-l);color:var(--teal-d)"><i class="fa-solid fa-baby-carriage"></i></div>
+            <div class="qa-label">Periksa ANC</div>
+          </div>
+          <div class="qa-btn" onclick="showPage('kb',document.querySelectorAll('.nav-item')[7])">
+            <div class="qa-icon" style="background:var(--blue-l);color:#185FA5"><i class="fa-solid fa-venus"></i></div>
+            <div class="qa-label">Layanan KB</div>
+          </div>
+          <div class="qa-btn" onclick="showPage('imunisasi',document.querySelectorAll('.nav-item')[8])">
+            <div class="qa-icon" style="background:var(--amber-l);color:#854F0B"><i class="fa-solid fa-syringe"></i></div>
+            <div class="qa-label">Imunisasi</div>
+          </div>
+          <div class="qa-btn" onclick="showPage('keuangan',document.querySelectorAll('.nav-item')[10])">
+            <div class="qa-icon" style="background:var(--purple-l);color:#3C3489"><i class="fa-solid fa-receipt"></i></div>
+            <div class="qa-label">Transaksi</div>
+          </div>
+        </div>
 
-            const data = {
-                nik: document.getElementById('nik').value,
-                nama: document.getElementById('nama').value,
-                tgl_lahir: document.getElementById('tgl_lahir').value,
-                wa: document.getElementById('wa').value,
-                action: 'tambahPasien'
-            };
+        <div class="two-col">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><i class="fa-solid fa-clock"></i> Antrian Hari Ini</div>
+              <span class="card-link" onclick="showPage('antrian',document.querySelectorAll('.nav-item')[1])">Lihat semua</span>
+            </div>
+            <div id="dash-antrian"><div class="empty"><i class="fa-solid fa-spinner fa-spin"></i><p>Memuat data...</p></div></div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><i class="fa-solid fa-triangle-exclamation"></i> Notifikasi</div>
+            </div>
+            <div id="dash-notif"><div class="empty"><i class="fa-solid fa-spinner fa-spin"></i><p>Memuat...</p></div></div>
+            <div class="card-header" style="margin-top:.9rem;margin-bottom:.4rem;">
+              <div class="card-title"><i class="fa-solid fa-chart-simple"></i> Kunjungan 7 Hari</div>
+            </div>
+            <div class="chart-bars" id="dash-grafik"></div>
+          </div>
+        </div>
+      </div>
 
-            // Simulasi pengiriman (Nanti diganti dengan fetch ke GAS)
-            console.log("Data siap dikirim:", data);
+      <!-- ─── ANTRIAN ─── -->
+      <div id="page-antrian" class="page">
+        <div class="page-hdr">
+          <div><h2>Jadwal & Antrian</h2><p>Daftar kunjungan pasien hari ini</p></div>
+          <button class="btn-primary" onclick="openModal('modal-kunjungan')"><i class="fa-solid fa-plus"></i> Tambah Kunjungan</button>
+        </div>
+        <div class="filter-bar">
+          <div class="search-box"><i class="fa-solid fa-search"></i><input id="q-antrian" placeholder="Cari nama pasien..." oninput="filterAntrian()"></div>
+          <input type="date" class="sel" id="tgl-antrian" onchange="loadAntrian()">
+          <select class="sel" id="sel-layanan" onchange="filterAntrian()">
+            <option value="">Semua Layanan</option>
+            <option>ANC</option><option>KB</option><option>Imunisasi</option>
+            <option>Persalinan</option><option>PNC</option><option>Umum</option>
+          </select>
+        </div>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>#</th><th>Nama Pasien</th><th>Layanan</th><th>Keluhan</th><th>Bidan</th><th>Status</th><th>Biaya</th><th>Aksi</th></tr></thead>
+            <tbody id="tbl-antrian"><tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--gray-400)">Memuat data...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
 
-            /* fetch(APPS_SCRIPT_URL, {
-                method: "POST",
-                body: JSON.stringify(data)
-            })
-            .then(res => res.json())
-            .then(res => {
-                alert("Data berhasil disimpan!");
-                e.target.reset();
-            })
-            .catch(err => alert("Gagal mengirim data"))
-            .finally(() => {
-                btn.disabled = false;
-                btn.innerText = "Simpan Data Pasien";
-            });
-            */
+      <!-- ─── PASIEN ─── -->
+      <div id="page-pasien" class="page">
+        <div class="page-hdr">
+          <div><h2>Data Pasien</h2><p>Manajemen rekam medis pasien</p></div>
+          <button class="btn-primary" onclick="openModal('modal-pasien')"><i class="fa-solid fa-plus"></i> Pasien Baru</button>
+        </div>
+        <div class="filter-bar">
+          <div class="search-box"><i class="fa-solid fa-search"></i><input id="q-pasien" placeholder="Cari nama, NIK, atau no HP..." oninput="searchPasien()"></div>
+        </div>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>ID</th><th>Nama</th><th>NIK</th><th>Tgl Lahir</th><th>No HP</th><th>Alamat</th><th>BPJS</th><th>Aksi</th></tr></thead>
+            <tbody id="tbl-pasien"><tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--gray-400)">Memuat data...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
 
-            setTimeout(() => {
-                alert("Simulasi Berhasil! (Hubungkan URL Apps Script untuk menyimpan sungguhan)");
-                btn.disabled = false;
-                btn.innerText = "Simpan Data Pasien";
-                e.target.reset();
-            }, 1000);
-        });
-    </script>
+      <!-- ─── ANC ─── -->
+      <div id="page-anc" class="page">
+        <div class="page-hdr">
+          <div><h2>Antenatal Care (ANC)</h2><p>Pencatatan pemeriksaan ibu hamil</p></div>
+          <button class="btn-primary" onclick="openModal('modal-anc')"><i class="fa-solid fa-plus"></i> Tambah ANC</button>
+        </div>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Tanggal</th><th>Nama Ibu</th><th>UK (mgg)</th><th>Kunjungan</th><th>BB</th><th>TD</th><th>TFU</th><th>DJJ</th><th>Komplikasi</th></tr></thead>
+            <tbody id="tbl-anc"><tr><td colspan="9" style="text-align:center;padding:2rem;color:var(--gray-400)">Memuat data...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+      <!-- ─── PERSALINAN ─── -->
+      <div id="page-persalinan" class="page">
+        <div class="page-hdr">
+          <div><h2>Persalinan</h2><p>Pencatatan data persalinan & partograf</p></div>
+          <button class="btn-primary" onclick="openModal('modal-persalinan')"><i class="fa-solid fa-plus"></i> Tambah Data</button>
+        </div>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Tanggal</th><th>Nama Ibu</th><th>Jenis</th><th>Penolong</th><th>BB Bayi</th><th>JK Bayi</th><th>APGAR</th><th>Komplikasi</th></tr></thead>
+            <tbody id="tbl-persalinan"><tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--gray-400)">Memuat data...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ─── PNC ─── -->
+      <div id="page-pnc" class="page">
+        <div class="page-hdr"><div><h2>Postnatal Care (PNC)</h2><p>Pemantauan ibu & bayi pasca persalinan</p></div></div>
+        <div class="empty" style="margin-top:3rem"><i class="fa-solid fa-seedling"></i><p>Modul PNC — Gunakan menu Kunjungan dan pilih jenis layanan PNC.</p></div>
+      </div>
+
+      <!-- ─── KB ─── -->
+      <div id="page-kb" class="page">
+        <div class="page-hdr">
+          <div><h2>KB (Keluarga Berencana)</h2><p>Manajemen akseptor & jadwal kontrol</p></div>
+          <button class="btn-primary" onclick="openModal('modal-kb')"><i class="fa-solid fa-plus"></i> Tambah Akseptor</button>
+        </div>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Nama Pasien</th><th>Metode KB</th><th>Tgl Mulai</th><th>Tgl Kontrol</th><th>Jml Suntik</th><th>Status</th><th>Aksi</th></tr></thead>
+            <tbody id="tbl-kb"><tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--gray-400)">Memuat data...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ─── IMUNISASI ─── -->
+      <div id="page-imunisasi" class="page">
+        <div class="page-hdr">
+          <div><h2>Imunisasi</h2><p>Jadwal & pencatatan imunisasi bayi</p></div>
+          <button class="btn-primary" onclick="openModal('modal-imunisasi')"><i class="fa-solid fa-plus"></i> Catat Imunisasi</button>
+        </div>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Tanggal</th><th>Nama Bayi</th><th>Tgl Lahir</th><th>Jenis Vaksin</th><th>Dosis</th><th>Batch</th><th>KIPI</th><th>Bidan</th></tr></thead>
+            <tbody id="tbl-imunisasi"><tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--gray-400)">Memuat data...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ─── STOK ─── -->
+      <div id="page-stok" class="page">
+        <div class="page-hdr">
+          <div><h2>Obat & Stok</h2><p>Manajemen stok obat dan alat kesehatan</p></div>
+          <button class="btn-primary" onclick="openModal('modal-stok')"><i class="fa-solid fa-plus"></i> Tambah Item</button>
+        </div>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Nama Item</th><th>Kategori</th><th>Satuan</th><th>Stok Masuk</th><th>Stok Keluar</th><th>Stok Akhir</th><th>Kadaluarsa</th><th>Status</th><th>Aksi</th></tr></thead>
+            <tbody id="tbl-stok"><tr><td colspan="9" style="text-align:center;padding:2rem;color:var(--gray-400)">Memuat data...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ─── KEUANGAN ─── -->
+      <div id="page-keuangan" class="page">
+        <div class="page-hdr">
+          <div><h2>Keuangan</h2><p>Pencatatan transaksi & pendapatan</p></div>
+          <button class="btn-primary" onclick="openModal('modal-keuangan')"><i class="fa-solid fa-plus"></i> Catat Transaksi</button>
+        </div>
+        <div class="filter-bar">
+          <input type="month" class="sel" id="bulan-keuangan" onchange="loadKeuangan()">
+          <div id="total-pendapatan" style="margin-left:auto;font-size:14px;font-weight:600;color:var(--teal-d)"></div>
+        </div>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Tanggal</th><th>Nama Pasien</th><th>Layanan</th><th>Metode</th><th>Jumlah</th><th>Status</th></tr></thead>
+            <tbody id="tbl-keuangan"><tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--gray-400)">Memuat data...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ─── LAPORAN ─── -->
+      <div id="page-laporan" class="page">
+        <div class="page-hdr">
+          <div><h2>Laporan</h2><p>Rekap bulanan untuk pelaporan internal & Dinas Kesehatan</p></div>
+          <button class="btn-primary" onclick="cetakLaporan()"><i class="fa-solid fa-print"></i> Cetak</button>
+        </div>
+        <div class="filter-bar">
+          <label style="font-size:13px;font-weight:600;color:var(--gray-600)">Pilih Bulan:</label>
+          <input type="month" class="sel" id="bulan-laporan" onchange="loadLaporan()">
+        </div>
+        <div class="lap-stat" id="lap-stat">
+          <div class="lap-card"><div class="lap-val" id="lap-kunjungan">–</div><div class="lap-lbl">Total Kunjungan</div></div>
+          <div class="lap-card"><div class="lap-val" id="lap-anc">–</div><div class="lap-lbl">Kunjungan ANC</div></div>
+          <div class="lap-card"><div class="lap-val" id="lap-kb">–</div><div class="lap-lbl">Akseptor KB Baru</div></div>
+          <div class="lap-card"><div class="lap-val" id="lap-imun">–</div><div class="lap-lbl">Imunisasi</div></div>
+          <div class="lap-card"><div class="lap-val" id="lap-pendapatan">–</div><div class="lap-lbl">Total Pendapatan</div></div>
+          <div class="lap-card"><div class="lap-val" id="lap-bpjs">–</div><div class="lap-lbl">Pasien BPJS</div></div>
+        </div>
+        <div class="card">
+          <div class="card-title" style="margin-bottom:.75rem"><i class="fa-solid fa-chart-pie"></i> Rincian Per Jenis Layanan</div>
+          <div id="lap-detail"></div>
+        </div>
+      </div>
+
+      <!-- ─── PENGATURAN ─── -->
+      <div id="page-pengaturan" class="page">
+        <div class="page-hdr"><div><h2>Pengaturan</h2><p>Konfigurasi aplikasi SiPMB</p></div></div>
+        <div class="card" style="max-width:500px">
+          <div class="card-title" style="margin-bottom:1rem"><i class="fa-solid fa-link"></i> Koneksi Google Spreadsheet</div>
+          <div class="form-group" style="margin-bottom:12px">
+            <label class="form-label">Apps Script Web App URL</label>
+            <input id="inp-api-url" class="form-input" type="text" placeholder="https://script.google.com/macros/s/...">
+          </div>
+          <button class="btn-save" onclick="saveApiUrl()">Simpan URL</button>
+          <div style="font-size:11.5px;color:var(--gray-400);margin-top:12px;line-height:1.6">
+            Dapatkan URL ini dari Google Apps Script → Deploy → New Deployment → Web App.<br>
+            Pilih <b>Execute as: Me</b> dan <b>Who has access: Anyone</b>.
+          </div>
+        </div>
+        <div class="card" style="max-width:500px;margin-top:12px">
+          <div class="card-title" style="margin-bottom:1rem"><i class="fa-solid fa-table"></i> Inisialisasi Spreadsheet</div>
+          <p style="font-size:13px;color:var(--gray-600);margin-bottom:12px">Jalankan fungsi <code>setupSpreadsheet()</code> sekali dari Apps Script Editor untuk membuat semua sheet dan akun default.</p>
+          <div style="background:var(--gray-50);border-radius:8px;padding:10px 12px;font-size:12px;font-family:monospace;color:var(--gray-700)">
+            1. Buka Google Apps Script<br>
+            2. Paste kode Code.gs<br>
+            3. Jalankan fungsi: setupSpreadsheet()<br>
+            4. Deploy sebagai Web App<br>
+            5. Salin URL dan paste di atas
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /#content -->
+  </div><!-- /#main-wrap -->
+</div><!-- /#app -->
+
+<!-- ══ MODALS ════════════════════════════════════════════ -->
+
+<!-- Modal Kunjungan -->
+<div class="overlay" id="modal-kunjungan">
+  <div class="modal">
+    <div class="modal-head"><span class="modal-title">Tambah Kunjungan</span><button class="modal-close" onclick="closeModal('modal-kunjungan')"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group form-full"><label class="form-label">Nama Pasien *</label><input id="kjg-pasien" class="form-input" placeholder="Ketik nama atau pilih..."></div>
+        <div class="form-group"><label class="form-label">Tanggal</label><input id="kjg-tgl" class="form-input" type="date"></div>
+        <div class="form-group"><label class="form-label">Jenis Layanan *</label>
+          <select id="kjg-layanan" class="form-input"><option>ANC</option><option>KB</option><option>Imunisasi</option><option>Persalinan</option><option>PNC</option><option>Umum</option></select>
+        </div>
+        <div class="form-group form-full"><label class="form-label">Keluhan</label><input id="kjg-keluhan" class="form-input" placeholder="Keluhan utama pasien"></div>
+        <div class="form-group"><label class="form-label">Bidan</label><input id="kjg-bidan" class="form-input" placeholder="Nama bidan"></div>
+        <div class="form-group"><label class="form-label">Biaya (Rp)</label><input id="kjg-biaya" class="form-input" type="number" placeholder="0"></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-sec" onclick="closeModal('modal-kunjungan')">Batal</button>
+      <button class="btn-save" onclick="submitKunjungan()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Pasien -->
+<div class="overlay" id="modal-pasien">
+  <div class="modal">
+    <div class="modal-head"><span class="modal-title">Tambah Pasien Baru</span><button class="modal-close" onclick="closeModal('modal-pasien')"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group form-full"><label class="form-label">Nama Lengkap *</label><input id="psn-nama" class="form-input" placeholder="Nama sesuai KTP"></div>
+        <div class="form-group"><label class="form-label">NIK</label><input id="psn-nik" class="form-input" placeholder="16 digit NIK"></div>
+        <div class="form-group"><label class="form-label">Tanggal Lahir</label><input id="psn-tgl" class="form-input" type="date"></div>
+        <div class="form-group form-full"><label class="form-label">Alamat</label><input id="psn-alamat" class="form-input" placeholder="Alamat lengkap"></div>
+        <div class="form-group"><label class="form-label">No HP</label><input id="psn-hp" class="form-input" placeholder="08xxxxxxxxx"></div>
+        <div class="form-group"><label class="form-label">Pekerjaan</label><input id="psn-kerja" class="form-input" placeholder="Pekerjaan"></div>
+        <div class="form-group"><label class="form-label">Golongan Darah</label>
+          <select id="psn-gol" class="form-input"><option>A</option><option>B</option><option>AB</option><option>O</option><option>Tidak diketahui</option></select>
+        </div>
+        <div class="form-group"><label class="form-label">Status BPJS</label>
+          <select id="psn-bpjs" class="form-input"><option>Tidak</option><option>Ya – PBI</option><option>Ya – Mandiri</option></select>
+        </div>
+        <div class="form-group form-full"><label class="form-label">No BPJS</label><input id="psn-nobpjs" class="form-input" placeholder="Jika peserta BPJS"></div>
+        <div class="form-group form-full"><label class="form-label">Catatan</label><textarea id="psn-catatan" class="form-input" rows="2" placeholder="Catatan tambahan"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-sec" onclick="closeModal('modal-pasien')">Batal</button>
+      <button class="btn-save" onclick="submitPasien()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal ANC -->
+<div class="overlay" id="modal-anc">
+  <div class="modal">
+    <div class="modal-head"><span class="modal-title">Tambah Data ANC</span><button class="modal-close" onclick="closeModal('modal-anc')"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group form-full"><label class="form-label">Nama Ibu *</label><input id="anc-nama" class="form-input" placeholder="Nama ibu hamil"></div>
+        <div class="form-group"><label class="form-label">Tanggal</label><input id="anc-tgl" class="form-input" type="date"></div>
+        <div class="form-group"><label class="form-label">Usia Kehamilan (mgg)</label><input id="anc-uk" class="form-input" type="number" placeholder="cth: 28"></div>
+        <div class="form-group"><label class="form-label">Kunjungan Ke</label>
+          <select id="anc-kke" class="form-input"><option>K1</option><option>K2</option><option>K3</option><option>K4</option></select>
+        </div>
+        <div class="form-group"><label class="form-label">Berat Badan (kg)</label><input id="anc-bb" class="form-input" type="number" placeholder="cth: 62"></div>
+        <div class="form-group"><label class="form-label">TD Sistolik (mmHg)</label><input id="anc-tds" class="form-input" type="number" placeholder="cth: 110"></div>
+        <div class="form-group"><label class="form-label">TD Diastolik (mmHg)</label><input id="anc-tdd" class="form-input" type="number" placeholder="cth: 70"></div>
+        <div class="form-group"><label class="form-label">TFU (cm)</label><input id="anc-tfu" class="form-input" type="number" placeholder="cth: 28"></div>
+        <div class="form-group"><label class="form-label">DJJ (x/mnt)</label><input id="anc-djj" class="form-input" type="number" placeholder="cth: 140"></div>
+        <div class="form-group"><label class="form-label">Presentasi</label>
+          <select id="anc-pres" class="form-input"><option>Kepala</option><option>Sungsang</option><option>Lintang</option><option>Belum bisa dinilai</option></select>
+        </div>
+        <div class="form-group"><label class="form-label">Hb (g/dL)</label><input id="anc-hb" class="form-input" type="number" step="0.1" placeholder="cth: 11.5"></div>
+        <div class="form-group"><label class="form-label">Komplikasi</label><input id="anc-komp" class="form-input" placeholder="Jika ada"></div>
+        <div class="form-group"><label class="form-label">Bidan</label><input id="anc-bidan" class="form-input"></div>
+        <div class="form-group form-full"><label class="form-label">Catatan & Rencana</label><textarea id="anc-catatan" class="form-input" rows="2" placeholder="Rencana tindak lanjut"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-sec" onclick="closeModal('modal-anc')">Batal</button>
+      <button class="btn-save" onclick="submitANC()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal KB -->
+<div class="overlay" id="modal-kb">
+  <div class="modal">
+    <div class="modal-head"><span class="modal-title">Tambah Akseptor KB</span><button class="modal-close" onclick="closeModal('modal-kb')"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group form-full"><label class="form-label">Nama Pasien *</label><input id="kb-nama" class="form-input" placeholder="Nama akseptor"></div>
+        <div class="form-group"><label class="form-label">Metode KB *</label>
+          <select id="kb-metode" class="form-input"><option>Suntik 1 Bulan</option><option>Suntik 3 Bulan</option><option>Pil</option><option>IUD</option><option>Implan</option><option>MOW</option><option>MOP</option><option>Kondom</option></select>
+        </div>
+        <div class="form-group"><label class="form-label">Tanggal Mulai</label><input id="kb-mulai" class="form-input" type="date"></div>
+        <div class="form-group"><label class="form-label">Tanggal Kontrol Berikutnya</label><input id="kb-kontrol" class="form-input" type="date"></div>
+        <div class="form-group form-full"><label class="form-label">Efek Samping</label><input id="kb-efek" class="form-input" placeholder="Jika ada efek samping"></div>
+        <div class="form-group"><label class="form-label">Bidan</label><input id="kb-bidan" class="form-input"></div>
+        <div class="form-group form-full"><label class="form-label">Catatan</label><textarea id="kb-catatan" class="form-input" rows="2"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-sec" onclick="closeModal('modal-kb')">Batal</button>
+      <button class="btn-save" onclick="submitKB()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Imunisasi -->
+<div class="overlay" id="modal-imunisasi">
+  <div class="modal">
+    <div class="modal-head"><span class="modal-title">Catat Imunisasi</span><button class="modal-close" onclick="closeModal('modal-imunisasi')"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group form-full"><label class="form-label">Nama Bayi *</label><input id="imn-bayi" class="form-input" placeholder="Nama bayi"></div>
+        <div class="form-group"><label class="form-label">Tanggal Lahir Bayi</label><input id="imn-lahir" class="form-input" type="date"></div>
+        <div class="form-group"><label class="form-label">Tanggal Imunisasi</label><input id="imn-tgl" class="form-input" type="date"></div>
+        <div class="form-group"><label class="form-label">Jenis Vaksin *</label>
+          <select id="imn-vaksin" class="form-input"><option>HB0</option><option>BCG</option><option>DPT-HB-Hib 1</option><option>DPT-HB-Hib 2</option><option>DPT-HB-Hib 3</option><option>Polio 1</option><option>Polio 2</option><option>Polio 3</option><option>Polio 4</option><option>MR</option><option>IPV</option></select>
+        </div>
+        <div class="form-group"><label class="form-label">Dosis Ke</label><input id="imn-dosis" class="form-input" type="number" value="1"></div>
+        <div class="form-group"><label class="form-label">No Batch Vaksin</label><input id="imn-batch" class="form-input" placeholder="No. batch"></div>
+        <div class="form-group"><label class="form-label">Lokasi Suntik</label>
+          <select id="imn-lokasi" class="form-input"><option>Paha Kiri</option><option>Paha Kanan</option><option>Lengan Kiri</option><option>Lengan Kanan</option><option>Oral</option></select>
+        </div>
+        <div class="form-group"><label class="form-label">KIPI</label><input id="imn-kipi" class="form-input" placeholder="Jika ada reaksi"></div>
+        <div class="form-group form-full"><label class="form-label">Bidan</label><input id="imn-bidan" class="form-input"></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-sec" onclick="closeModal('modal-imunisasi')">Batal</button>
+      <button class="btn-save" onclick="submitImunisasi()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Stok -->
+<div class="overlay" id="modal-stok">
+  <div class="modal">
+    <div class="modal-head"><span class="modal-title">Tambah Item Stok</span><button class="modal-close" onclick="closeModal('modal-stok')"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group form-full"><label class="form-label">Nama Item *</label><input id="stk-nama" class="form-input" placeholder="Nama obat/alkes"></div>
+        <div class="form-group"><label class="form-label">Kategori</label>
+          <select id="stk-kat" class="form-input"><option>Obat</option><option>Vaksin</option><option>Alat Kontrasepsi</option><option>Alkes</option><option>BHP</option></select>
+        </div>
+        <div class="form-group"><label class="form-label">Satuan</label><input id="stk-sat" class="form-input" placeholder="cth: tablet, ampul, dosis"></div>
+        <div class="form-group"><label class="form-label">Stok Masuk</label><input id="stk-masuk" class="form-input" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Harga Satuan (Rp)</label><input id="stk-harga" class="form-input" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Kadaluarsa</label><input id="stk-exp" class="form-input" type="date"></div>
+        <div class="form-group form-full"><label class="form-label">Supplier</label><input id="stk-sup" class="form-input" placeholder="Nama supplier/apotek"></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-sec" onclick="closeModal('modal-stok')">Batal</button>
+      <button class="btn-save" onclick="submitStok()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Keuangan -->
+<div class="overlay" id="modal-keuangan">
+  <div class="modal">
+    <div class="modal-head"><span class="modal-title">Catat Transaksi</span><button class="modal-close" onclick="closeModal('modal-keuangan')"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group form-full"><label class="form-label">Nama Pasien *</label><input id="keu-nama" class="form-input" placeholder="Nama pasien"></div>
+        <div class="form-group"><label class="form-label">Tanggal</label><input id="keu-tgl" class="form-input" type="date"></div>
+        <div class="form-group"><label class="form-label">Jenis Layanan</label>
+          <select id="keu-layanan" class="form-input"><option>ANC</option><option>KB</option><option>Imunisasi</option><option>Persalinan</option><option>PNC</option><option>Umum</option><option>Obat</option></select>
+        </div>
+        <div class="form-group"><label class="form-label">Metode Bayar</label>
+          <select id="keu-metode" class="form-input"><option>Tunai</option><option>Transfer</option><option>QRIS</option><option>BPJS</option></select>
+        </div>
+        <div class="form-group"><label class="form-label">Jumlah (Rp) *</label><input id="keu-jumlah" class="form-input" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Status</label>
+          <select id="keu-status" class="form-input"><option>Lunas</option><option>Belum Lunas</option></select>
+        </div>
+        <div class="form-group form-full"><label class="form-label">No BPJS</label><input id="keu-bpjs" class="form-input" placeholder="Jika pasien BPJS"></div>
+        <div class="form-group form-full"><label class="form-label">Catatan</label><input id="keu-catatan" class="form-input" placeholder="Catatan tambahan"></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-sec" onclick="closeModal('modal-keuangan')">Batal</button>
+      <button class="btn-save" onclick="submitKeuangan()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Persalinan -->
+<div class="overlay" id="modal-persalinan">
+  <div class="modal">
+    <div class="modal-head"><span class="modal-title">Catat Data Persalinan</span><button class="modal-close" onclick="closeModal('modal-persalinan')"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group form-full"><label class="form-label">Nama Ibu *</label><input id="psl-nama" class="form-input" placeholder="Nama ibu bersalin"></div>
+        <div class="form-group"><label class="form-label">Tanggal</label><input id="psl-tgl" class="form-input" type="date"></div>
+        <div class="form-group"><label class="form-label">Jam Lahir</label><input id="psl-jam" class="form-input" type="time"></div>
+        <div class="form-group"><label class="form-label">Jenis Persalinan</label>
+          <select id="psl-jenis" class="form-input"><option>Spontan</option><option>Vacum Ekstraksi</option><option>SC</option><option>Forsep</option></select>
+        </div>
+        <div class="form-group"><label class="form-label">Penolong</label><input id="psl-penolong" class="form-input" placeholder="Nama bidan/dokter"></div>
+        <div class="form-group"><label class="form-label">BB Bayi (gram)</label><input id="psl-bb" class="form-input" type="number" placeholder="cth: 3200"></div>
+        <div class="form-group"><label class="form-label">PB Bayi (cm)</label><input id="psl-pb" class="form-input" type="number" placeholder="cth: 50"></div>
+        <div class="form-group"><label class="form-label">Jenis Kelamin Bayi</label>
+          <select id="psl-jk" class="form-input"><option>Laki-laki</option><option>Perempuan</option></select>
+        </div>
+        <div class="form-group"><label class="form-label">APGAR 1 menit</label><input id="psl-apgar1" class="form-input" type="number" min="0" max="10"></div>
+        <div class="form-group"><label class="form-label">APGAR 5 menit</label><input id="psl-apgar5" class="form-input" type="number" min="0" max="10"></div>
+        <div class="form-group form-full"><label class="form-label">Komplikasi Ibu</label><input id="psl-kompibu" class="form-input" placeholder="Jika ada"></div>
+        <div class="form-group form-full"><label class="form-label">Komplikasi Bayi</label><input id="psl-kompbayi" class="form-input" placeholder="Jika ada"></div>
+        <div class="form-group form-full"><label class="form-label">Catatan</label><textarea id="psl-catatan" class="form-input" rows="2"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-sec" onclick="closeModal('modal-persalinan')">Batal</button>
+      <button class="btn-save" onclick="submitPersalinan()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<script>
+// ══ CONFIG ════════════════════════════════════════════════
+let API_URL = localStorage.getItem('sipmb_api_url') || '';
+let currentUser = null;
+let allAntrian = [];
+let allPasien  = [];
+
+// ══ INIT ══════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  setTodayDate();
+  document.getElementById('inp-api-url').value = API_URL;
+  const saved = localStorage.getItem('sipmb_user');
+  if (saved) {
+    currentUser = JSON.parse(saved);
+    startApp();
+  }
+  document.getElementById('inp-pass').addEventListener('keypress', e => {
+    if (e.key === 'Enter') doLogin();
+  });
+});
+
+function setTodayDate() {
+  const today = new Date().toISOString().split('T')[0];
+  const now   = new Date();
+  const opts  = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
+  document.getElementById('page-date').textContent = now.toLocaleDateString('id-ID', opts);
+
+  // Set default tanggal di semua input date
+  ['kjg-tgl','anc-tgl','kb-mulai','kb-kontrol','imn-tgl','keu-tgl','psl-tgl'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = today;
+  });
+  const tglAntrian = document.getElementById('tgl-antrian');
+  if (tglAntrian) tglAntrian.value = today;
+
+  const ym = today.substring(0, 7);
+  ['bulan-keuangan','bulan-laporan'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = ym;
+  });
+}
+
+// ══ API ══════════════════════════════════════════════════
+function api(action, data = {}) {
+  return new Promise((resolve, reject) => {
+    if (!API_URL) {
+      // Mode demo (tanpa API)
+      resolve(demoData(action, data));
+      return;
+    }
+    const url = `${API_URL}?action=${action}&data=${encodeURIComponent(JSON.stringify(data))}`;
+    fetch(url)
+      .then(r => r.json())
+      .then(resolve)
+      .catch(() => {
+        // Fallback ke mode demo
+        resolve(demoData(action, data));
+      });
+  });
+}
+
+// ══ DEMO DATA (tanpa API) ═════════════════════════════════
+function demoData(action, data) {
+  const today = new Date().toISOString().split('T')[0];
+  const demos = {
+    login: d => d.username === 'admin' && d.password === 'admin123'
+      ? { success: true, user: { id:'USR-001', nama:'Admin PMB', username:'admin', role:'admin' } }
+      : d.username === 'bidan' && d.password === 'bidan123'
+      ? { success: true, user: { id:'USR-002', nama:'Bd. Sari, Amd.Keb', username:'bidan', role:'bidan' } }
+      : { success: false, message: 'Username atau password salah.' },
+    getDashboard: () => ({ success: true, data: {
+      stats: { kunjunganHariIni: 8, totalPasien: 127, ibuHamilAktif: 34, akseptorAktif: 98, kbHariIni: 5, pendapatanHariIni: 1250000, stokMenipisCount: 2 },
+      antrian: [
+        { ID:'KJG-001', Nama_Pasien:'Ny. Rina Susanti', Jenis_Layanan:'ANC', Keluhan:'Periksa rutin', Bidan:'Bd. Sari', Status:'Menunggu', Biaya:50000, Dibuat_Pada: today+' 08:00:00' },
+        { ID:'KJG-002', Nama_Pasien:'Ny. Dewi Lestari', Jenis_Layanan:'KB', Keluhan:'Suntik KB', Bidan:'Bd. Sari', Status:'Proses', Biaya:30000, Dibuat_Pada: today+' 08:30:00' },
+        { ID:'KJG-003', Nama_Pasien:'By. Arjuna (3 bln)', Jenis_Layanan:'Imunisasi', Keluhan:'Imunisasi rutin', Bidan:'Bd. Sari', Status:'Selesai', Biaya:0, Dibuat_Pada: today+' 09:00:00' },
+        { ID:'KJG-004', Nama_Pasien:'Ny. Sri Wahyuni', Jenis_Layanan:'PNC', Keluhan:'Nifas hari ke-7', Bidan:'Bd. Ani', Status:'Menunggu', Biaya:45000, Dibuat_Pada: today+' 09:30:00' },
+        { ID:'KJG-005', Nama_Pasien:'Ny. Ambar Sari', Jenis_Layanan:'ANC', Keluhan:'K3 trimester 3', Bidan:'Bd. Sari', Status:'Menunggu', Biaya:50000, Dibuat_Pada: today+' 10:00:00' },
+      ],
+      grafik: [
+        {hari:'Sen',jumlah:7,isToday:false},{hari:'Sel',jumlah:9,isToday:false},
+        {hari:'Rab',jumlah:5,isToday:false},{hari:'Kam',jumlah:11,isToday:false},
+        {hari:'Jum',jumlah:8,isToday:false},{hari:'Sab',jumlah:8,isToday:true},
+        {hari:'Min',jumlah:3,isToday:false}
+      ],
+      notifikasi: [
+        { tipe:'danger', judul:'Ny. Fatimah – HPL hari ini', pesan:'G2P1A0, 40 minggu, terakhir periksa 3 hari lalu', ikon:'heart-pulse' },
+        { tipe:'warning', judul:'Stok BCG tersisa 5 dosis', pesan:'Segera ajukan permintaan ke Puskesmas', ikon:'pills' },
+        { tipe:'info', judul:'Laporan April belum dikirim', pesan:'Jatuh tempo 10 Mei 2026', ikon:'chart-line' },
+        { tipe:'warning', judul:'5 akseptor KB jadwal suntik hari ini', pesan:'2 belum konfirmasi kehadiran', ikon:'venus' },
+      ]
+    }}),
+    getPasien: () => ({ success: true, data: [
+      { ID:'PSN-2026001', Nama:'Ny. Rina Susanti', NIK:'3201234567890001', Tanggal_Lahir:'1995-03-12', No_HP:'081234567890', Alamat:'Jl. Mawar No.5, Tangerang', Status_BPJS:'Ya – PBI', Golongan_Darah:'O' },
+      { ID:'PSN-2026002', Nama:'Ny. Dewi Lestari', NIK:'3201234567890002', Tanggal_Lahir:'1993-07-22', No_HP:'082345678901', Alamat:'Jl. Melati No.8, Tangerang', Status_BPJS:'Tidak', Golongan_Darah:'A' },
+      { ID:'PSN-2026003', Nama:'Ny. Sri Wahyuni', NIK:'3201234567890003', Tanggal_Lahir:'1998-11-05', No_HP:'083456789012', Alamat:'Jl. Anggrek No.12, Tangerang', Status_BPJS:'Ya – Mandiri', Golongan_Darah:'B' },
+    ]}),
+    getAntrian: () => ({ success: true, data: demos.getDashboard().data.antrian }),
+    getANC: () => ({ success: true, data: [
+      { Tanggal: today, Nama_Pasien:'Ny. Rina Susanti', Usia_Kehamilan:28, Kunjungan_Ke:'K3', BB:65, TD_Sistol:110, TD_Diastol:70, TFU:28, DJJ:140, Komplikasi:'-' },
+    ]}),
+    getKB: () => ({ success: true, data: [
+      { Nama_Pasien:'Ny. Dewi Lestari', Metode_KB:'Suntik 3 Bulan', Tanggal_Mulai:'2026-02-10', Tanggal_Kontrol:'2026-05-10', Jumlah_Suntik:2, Status_Aktif:true },
+    ]}),
+    getImunisasi: () => ({ success: true, data: [
+      { Tanggal: today, Nama_Bayi:'By. Arjuna', Tanggal_Lahir_Bayi:'2026-02-09', Jenis_Vaksin:'DPT-HB-Hib 1', Dosis_Ke:1, Batch_Vaksin:'BT001', KIPI:'-', Bidan:'Bd. Sari' },
+    ]}),
+    getStok: () => ({ success: true, data: [
+      { Nama_Item:'Tablet Fe', Kategori:'Obat', Satuan:'tablet', Stok_Masuk:500, Stok_Keluar:120, Stok_Akhir:380, Kadaluarsa:'2027-01-01' },
+      { Nama_Item:'BCG', Kategori:'Vaksin', Satuan:'dosis', Stok_Masuk:20, Stok_Keluar:15, Stok_Akhir:5, Kadaluarsa:'2026-08-01' },
+      { Nama_Item:'Suntik KB 3 Bulan', Kategori:'Alat Kontrasepsi', Satuan:'ampul', Stok_Masuk:50, Stok_Keluar:18, Stok_Akhir:32, Kadaluarsa:'2027-06-01' },
+    ]}),
+    getKeuangan: () => ({ success: true, data: [
+      { Tanggal: today, Nama_Pasien:'Ny. Rina Susanti', Jenis_Layanan:'ANC', Metode_Bayar:'Tunai', Jumlah:50000, Status_Bayar:'Lunas' },
+      { Tanggal: today, Nama_Pasien:'Ny. Dewi Lestari', Jenis_Layanan:'KB', Metode_Bayar:'BPJS', Jumlah:0, Status_Bayar:'Lunas' },
+    ], totalPendapatan: 1250000 }),
+    getLaporan: () => ({ success: true, data: {
+      totalKunjungan:42, totalANC:18, totalKB:8, totalImunisasi:12,
+      totalPendapatan:8750000, totalBPJS:15,
+      jenisLayanan:{ ANC:18, KB:8, Imunisasi:12, Umum:4 }
+    }}),
+    default: () => ({ success: true, message: 'Demo: data disimpan (tidak terhubung ke Spreadsheet)', id: 'DEMO-' + Date.now() })
+  };
+  return (demos[action] || demos.default)(data);
+}
+
+// ══ AUTH ══════════════════════════════════════════════════
+function doLogin() {
+  const username = document.getElementById('inp-user').value.trim();
+  const password = document.getElementById('inp-pass').value;
+  if (!username || !password) { document.getElementById('login-err').textContent = 'Isi username dan password.'; return; }
+  document.getElementById('login-err').textContent = '';
+  api('login', { username, password }).then(res => {
+    if (res.success) {
+      currentUser = res.user;
+      localStorage.setItem('sipmb_user', JSON.stringify(currentUser));
+      document.getElementById('login-page').style.display = 'none';
+      startApp();
+    } else {
+      document.getElementById('login-err').textContent = res.message;
+    }
+  });
+}
+
+function doLogout() {
+  localStorage.removeItem('sipmb_user');
+  currentUser = null;
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-page').style.display = 'flex';
+}
+
+function startApp() {
+  document.getElementById('app').style.display = 'flex';
+  document.getElementById('login-page').style.display = 'none';
+  const initials = currentUser.nama.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+  document.getElementById('user-avatar').textContent = initials;
+  document.getElementById('user-name').textContent   = currentUser.nama;
+  document.getElementById('user-role').textContent   = currentUser.role;
+  loadDashboard();
+}
+
+// ══ NAVIGATION ════════════════════════════════════════════
+const pageTitles = {
+  dashboard:'Dashboard', antrian:'Jadwal & Antrian', pasien:'Data Pasien',
+  anc:'Antenatal Care (ANC)', persalinan:'Persalinan', pnc:'Postnatal Care',
+  kb:'KB – Keluarga Berencana', imunisasi:'Imunisasi', stok:'Obat & Stok',
+  keuangan:'Keuangan', laporan:'Laporan', pengaturan:'Pengaturan'
+};
+const topbarActions = {
+  dashboard:   { label:'Pasien Baru',       modal:'modal-pasien' },
+  antrian:     { label:'Tambah Kunjungan',  modal:'modal-kunjungan' },
+  pasien:      { label:'Pasien Baru',       modal:'modal-pasien' },
+  anc:         { label:'Tambah ANC',        modal:'modal-anc' },
+  persalinan:  { label:'Tambah Persalinan', modal:'modal-persalinan' },
+  kb:          { label:'Tambah Akseptor',   modal:'modal-kb' },
+  imunisasi:   { label:'Catat Imunisasi',   modal:'modal-imunisasi' },
+  stok:        { label:'Tambah Item',       modal:'modal-stok' },
+  keuangan:    { label:'Catat Transaksi',   modal:'modal-keuangan' },
+  laporan:     { label:'Cetak Laporan',     modal:null },
+  pnc:         { label:'Tambah Kunjungan',  modal:'modal-kunjungan' },
+  pengaturan:  { label:'Simpan',            modal:null },
+};
+
+let currentPage = 'dashboard';
+function showPage(page, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (el) el.classList.add('active');
+  document.getElementById('page-title').textContent = pageTitles[page] || page;
+  currentPage = page;
+  const act = topbarActions[page];
+  if (act) { document.getElementById('topbar-action-label').textContent = act.label; }
+  // Close sidebar on mobile
+  if (window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('open');
+  // Load data
+  const loaders = { antrian: loadAntrian, pasien: loadPasien, anc: loadANC, persalinan: loadPersalinan, kb: loadKB, imunisasi: loadImunisasi, stok: loadStok, keuangan: loadKeuangan, laporan: loadLaporan };
+  if (loaders[page]) loaders[page]();
+}
+
+function topbarAction() {
+  const act = topbarActions[currentPage];
+  if (act && act.modal) openModal(act.modal);
+  else if (currentPage === 'laporan') cetakLaporan();
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+// ══ MODAL ═════════════════════════════════════════════════
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+document.addEventListener('click', e => {
+  if (e.target.classList.contains('overlay')) {
+    e.target.classList.remove('open');
+  }
+});
+
+// ══ TOAST ═════════════════════════════════════════════════
+function showToast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  const item = document.createElement('div');
+  item.className = 'toast-item ' + type;
+  item.innerHTML = `<i class="fa-solid fa-${type==='success'?'circle-check':type==='error'?'circle-xmark':'circle-info'}"></i> ${msg}`;
+  t.appendChild(item);
+  setTimeout(() => item.remove(), 3500);
+}
+
+// ══ DASHBOARD ════════════════════════════════════════════
+function loadDashboard() {
+  api('getDashboard').then(res => {
+    if (!res.success) return;
+    const d = res.data;
+    const s = d.stats;
+    document.getElementById('st-kunjungan').textContent = s.kunjunganHariIni;
+    document.getElementById('st-pasien').textContent    = s.totalPasien;
+    document.getElementById('st-hamil').textContent     = s.ibuHamilAktif;
+    document.getElementById('st-kb').textContent        = s.akseptorAktif;
+    document.getElementById('st-kb-sub').textContent    = s.kbHariIni + ' jadwal suntik hari ini';
+    document.getElementById('badge-antrian').textContent = s.kunjunganHariIni;
+
+    // Notif dot
+    if (s.stokMenipisCount > 0) document.getElementById('notif-dot').style.display = 'block';
+
+    // Antrian dashboard
+    const antrianEl = document.getElementById('dash-antrian');
+    if (!d.antrian.length) { antrianEl.innerHTML = '<div class="empty"><i class="fa-solid fa-calendar-check"></i><p>Belum ada antrian hari ini</p></div>'; }
+    else {
+      antrianEl.innerHTML = d.antrian.slice(0,5).map((a,i) => `
+        <div class="antrian-row">
+          <div class="antrian-num">${i+1}</div>
+          <div class="antrian-info">
+            <div class="antrian-name">${a.Nama_Pasien}</div>
+            <div class="antrian-type"><span class="pill pill-${a.Jenis_Layanan.toLowerCase().replace(/\s.*/,'')}">${a.Jenis_Layanan}</span></div>
+          </div>
+          <div class="antrian-time">${formatTime(a.Dibuat_Pada)}</div>
+        </div>`).join('');
+    }
+
+    // Notifikasi
+    const notifEl = document.getElementById('dash-notif');
+    if (!d.notifikasi.length) { notifEl.innerHTML = '<div class="empty"><i class="fa-solid fa-check-circle"></i><p>Tidak ada notifikasi</p></div>'; }
+    else {
+      notifEl.innerHTML = d.notifikasi.map(n => `
+        <div class="notif-row">
+          <div class="notif-icon notif-${n.tipe}"><i class="fa-solid fa-${n.ikon}"></i></div>
+          <div><div class="notif-title">${n.judul}</div><div class="notif-desc">${n.pesan}</div></div>
+        </div>`).join('');
+    }
+
+    // Grafik
+    const max = Math.max(...d.grafik.map(g => g.jumlah), 1);
+    document.getElementById('dash-grafik').innerHTML = d.grafik.map(g => `
+      <div class="bar-wrap">
+        <div class="bar-val">${g.jumlah}</div>
+        <div class="bar ${g.isToday?'active':''}" style="height:${Math.max(8,(g.jumlah/max)*70)}px"></div>
+        <div class="bar-lbl">${g.hari}</div>
+      </div>`).join('');
+  });
+}
+
+// ══ ANTRIAN ══════════════════════════════════════════════
+function loadAntrian() {
+  const tgl = document.getElementById('tgl-antrian').value;
+  api('getAntrian', { tanggal: tgl }).then(res => {
+    allAntrian = res.data || [];
+    renderAntrian(allAntrian);
+  });
+}
+
+function filterAntrian() {
+  const q = document.getElementById('q-antrian').value.toLowerCase();
+  const lyr = document.getElementById('sel-layanan').value;
+  const filtered = allAntrian.filter(a =>
+    (!q || a.Nama_Pasien.toLowerCase().includes(q)) &&
+    (!lyr || a.Jenis_Layanan === lyr)
+  );
+  renderAntrian(filtered);
+}
+
+function renderAntrian(data) {
+  const tb = document.getElementById('tbl-antrian');
+  if (!data.length) { tb.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--gray-400)">Belum ada data kunjungan</td></tr>'; return; }
+  tb.innerHTML = data.map((a,i) => `
+    <tr>
+      <td>${i+1}</td>
+      <td><b>${a.Nama_Pasien}</b></td>
+      <td><span class="pill pill-${a.Jenis_Layanan.toLowerCase().replace(/\s.*/,'')}">${a.Jenis_Layanan}</span></td>
+      <td>${a.Keluhan || '-'}</td>
+      <td>${a.Bidan || '-'}</td>
+      <td><span class="status status-${(a.Status||'').toLowerCase()}">${a.Status}</span></td>
+      <td>${a.Biaya ? 'Rp' + Number(a.Biaya).toLocaleString('id-ID') : 'Gratis'}</td>
+      <td>
+        <button onclick="ubahStatus('${a.ID}','Proses')" style="font-size:11px;padding:3px 8px;border-radius:5px;border:1px solid var(--gray-200);cursor:pointer;margin-right:3px" title="Proses">Proses</button>
+        <button onclick="ubahStatus('${a.ID}','Selesai')" style="font-size:11px;padding:3px 8px;border-radius:5px;background:var(--teal-l);border:1px solid var(--teal-m);color:var(--teal-d);cursor:pointer" title="Selesai">Selesai</button>
+      </td>
+    </tr>`).join('');
+}
+
+function ubahStatus(id, status) {
+  api('updateStatusKunjungan', { id, status }).then(res => {
+    if (res.success) { showToast('Status diperbarui ke ' + status); loadAntrian(); }
+  });
+}
+
+// ══ PASIEN ════════════════════════════════════════════════
+function loadPasien() {
+  api('getPasien').then(res => {
+    allPasien = res.data || [];
+    renderPasien(allPasien);
+  });
+}
+
+function searchPasien() {
+  const q = document.getElementById('q-pasien').value.toLowerCase();
+  const filtered = allPasien.filter(p =>
+    p.Nama.toLowerCase().includes(q) ||
+    String(p.NIK).includes(q) ||
+    String(p.No_HP).includes(q)
+  );
+  renderPasien(filtered);
+}
+
+function renderPasien(data) {
+  const tb = document.getElementById('tbl-pasien');
+  if (!data.length) { tb.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--gray-400)">Belum ada data pasien</td></tr>'; return; }
+  tb.innerHTML = data.map(p => `
+    <tr>
+      <td style="font-size:11px;color:var(--gray-400)">${p.ID}</td>
+      <td><b>${p.Nama}</b></td>
+      <td>${p.NIK || '-'}</td>
+      <td>${p.Tanggal_Lahir || '-'}</td>
+      <td>${p.No_HP || '-'}</td>
+      <td>${p.Alamat || '-'}</td>
+      <td>${p.Status_BPJS && p.Status_BPJS !== 'Tidak' ? '<span class="status status-bpjs">BPJS</span>' : '-'}</td>
+      <td><button onclick="hapusPasien('${p.ID}')" style="font-size:11px;padding:3px 8px;border-radius:5px;background:var(--red-l);border:1px solid #F09595;color:#791F1F;cursor:pointer">Hapus</button></td>
+    </tr>`).join('');
+}
+
+function hapusPasien(id) {
+  if (!confirm('Hapus data pasien ini?')) return;
+  api('deletePasien', { id }).then(res => {
+    if (res.success) { showToast('Pasien dihapus'); loadPasien(); }
+    else showToast(res.message, 'error');
+  });
+}
+
+// ══ ANC ══════════════════════════════════════════════════
+function loadANC() {
+  api('getANC').then(res => {
+    const data = res.data || [];
+    const tb   = document.getElementById('tbl-anc');
+    if (!data.length) { tb.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:2rem;color:var(--gray-400)">Belum ada data ANC</td></tr>'; return; }
+    tb.innerHTML = data.map(a => `
+      <tr>
+        <td>${a.Tanggal}</td>
+        <td><b>${a.Nama_Pasien}</b></td>
+        <td>${a.Usia_Kehamilan}</td>
+        <td><span class="pill pill-anc">${a.Kunjungan_Ke}</span></td>
+        <td>${a.BB} kg</td>
+        <td>${a.TD_Sistol}/${a.TD_Diastol}</td>
+        <td>${a.TFU} cm</td>
+        <td>${a.DJJ} x/mnt</td>
+        <td>${a.Komplikasi || '-'}</td>
+      </tr>`).join('');
+  });
+}
+
+// ══ PERSALINAN ════════════════════════════════════════════
+function loadPersalinan() {
+  api('getPersalinan', {}).then(res => {
+    const data = res.data || [];
+    const tb   = document.getElementById('tbl-persalinan');
+    if (!data.length) { tb.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--gray-400)">Belum ada data persalinan</td></tr>'; return; }
+    tb.innerHTML = data.map(p => `
+      <tr>
+        <td>${p.Tanggal}</td><td><b>${p.Nama_Pasien}</b></td>
+        <td>${p.Jenis_Persalinan}</td><td>${p.Penolong}</td>
+        <td>${p.BB_Bayi}g</td><td>${p.JK_Bayi}</td>
+        <td>${p.APGAR1}/${p.APGAR5}</td><td>${p.Komplikasi_Ibu||'-'}</td>
+      </tr>`).join('');
+  }).catch(() => {
+    document.getElementById('tbl-persalinan').innerHTML = '<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--gray-400)">Belum ada data persalinan</td></tr>';
+  });
+}
+
+// ══ KB ════════════════════════════════════════════════════
+function loadKB() {
+  api('getKB').then(res => {
+    const data = res.data || [];
+    const tb   = document.getElementById('tbl-kb');
+    if (!data.length) { tb.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--gray-400)">Belum ada data akseptor KB</td></tr>'; return; }
+    tb.innerHTML = data.map(k => `
+      <tr>
+        <td><b>${k.Nama_Pasien}</b></td>
+        <td><span class="pill pill-kb">${k.Metode_KB}</span></td>
+        <td>${k.Tanggal_Mulai}</td>
+        <td><b>${k.Tanggal_Kontrol}</b></td>
+        <td>${k.Jumlah_Suntik}x</td>
+        <td><span class="status ${k.Status_Aktif?'status-aktif':'status-nonaktif'}">${k.Status_Aktif?'Aktif':'Non-aktif'}</span></td>
+        <td><button onclick="" style="font-size:11px;padding:3px 8px;border-radius:5px;border:1px solid var(--gray-200);cursor:pointer">Update Kontrol</button></td>
+      </tr>`).join('');
+  });
+}
+
+// ══ IMUNISASI ════════════════════════════════════════════
+function loadImunisasi() {
+  api('getImunisasi').then(res => {
+    const data = res.data || [];
+    const tb   = document.getElementById('tbl-imunisasi');
+    if (!data.length) { tb.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--gray-400)">Belum ada data imunisasi</td></tr>'; return; }
+    tb.innerHTML = data.map(m => `
+      <tr>
+        <td>${m.Tanggal}</td><td><b>${m.Nama_Bayi}</b></td>
+        <td>${m.Tanggal_Lahir_Bayi}</td>
+        <td><span class="pill pill-imun">${m.Jenis_Vaksin}</span></td>
+        <td>${m.Dosis_Ke}</td><td>${m.Batch_Vaksin||'-'}</td>
+        <td>${m.KIPI||'-'}</td><td>${m.Bidan||'-'}</td>
+      </tr>`).join('');
+  });
+}
+
+// ══ STOK ════════════════════════════════════════════════
+function loadStok() {
+  api('getStok').then(res => {
+    const data = res.data || [];
+    const tb   = document.getElementById('tbl-stok');
+    if (!data.length) { tb.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:2rem;color:var(--gray-400)">Belum ada data stok</td></tr>'; return; }
+    tb.innerHTML = data.map(s => {
+      const menipis = Number(s.Stok_Akhir) <= 10;
+      return `<tr>
+        <td><b>${s.Nama_Item}</b></td>
+        <td>${s.Kategori}</td><td>${s.Satuan}</td>
+        <td>${s.Stok_Masuk}</td><td>${s.Stok_Keluar}</td>
+        <td><b>${s.Stok_Akhir}</b></td>
+        <td>${s.Kadaluarsa||'-'}</td>
+        <td><span class="status ${menipis?'status-menipis':'status-aktif'}">${menipis?'Menipis':'Cukup'}</span></td>
+        <td><button style="font-size:11px;padding:3px 8px;border-radius:5px;border:1px solid var(--gray-200);cursor:pointer">Update</button></td>
+      </tr>`;
+    }).join('');
+  });
+}
+
+// ══ KEUANGAN ════════════════════════════════════════════
+function loadKeuangan() {
+  const bulan = document.getElementById('bulan-keuangan').value;
+  api('getKeuangan', { bulan }).then(res => {
+    const data = res.data || [];
+    document.getElementById('total-pendapatan').textContent = 'Total: Rp' + Number(res.totalPendapatan||0).toLocaleString('id-ID');
+    const tb = document.getElementById('tbl-keuangan');
+    if (!data.length) { tb.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--gray-400)">Belum ada transaksi</td></tr>'; return; }
+    tb.innerHTML = data.map(k => `
+      <tr>
+        <td>${k.Tanggal}</td><td><b>${k.Nama_Pasien}</b></td>
+        <td>${k.Jenis_Layanan}</td><td>${k.Metode_Bayar}</td>
+        <td><b>Rp${Number(k.Jumlah).toLocaleString('id-ID')}</b></td>
+        <td><span class="status ${k.Status_Bayar==='Lunas'?'status-lunas':'status-menunggu'}">${k.Status_Bayar}</span></td>
+      </tr>`).join('');
+  });
+}
+
+// ══ LAPORAN ══════════════════════════════════════════════
+function loadLaporan() {
+  const bulan = document.getElementById('bulan-laporan').value;
+  api('getLaporan', { bulan }).then(res => {
+    if (!res.success) return;
+    const d = res.data;
+    document.getElementById('lap-kunjungan').textContent = d.totalKunjungan;
+    document.getElementById('lap-anc').textContent       = d.totalANC;
+    document.getElementById('lap-kb').textContent        = d.totalKB;
+    document.getElementById('lap-imun').textContent      = d.totalImunisasi;
+    document.getElementById('lap-pendapatan').textContent= 'Rp' + Number(d.totalPendapatan).toLocaleString('id-ID');
+    document.getElementById('lap-bpjs').textContent      = d.totalBPJS;
+    const detailEl = document.getElementById('lap-detail');
+    if (d.jenisLayanan) {
+      detailEl.innerHTML = Object.entries(d.jenisLayanan).map(([k,v]) => `
+        <div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--gray-100)">
+          <span style="min-width:120px;font-weight:600;font-size:13px">${k}</span>
+          <div style="flex:1;background:var(--gray-100);border-radius:99px;height:8px">
+            <div style="width:${Math.min(100,(v/d.totalKunjungan)*100)}%;background:var(--teal);height:8px;border-radius:99px"></div>
+          </div>
+          <span style="font-size:13px;font-weight:600;color:var(--teal-d);min-width:30px;text-align:right">${v}</span>
+        </div>`).join('');
+    }
+  });
+}
+
+function cetakLaporan() {
+  window.print();
+}
+
+// ══ SUBMIT FORMS ════════════════════════════════════════
+function submitKunjungan() {
+  const data = {
+    namaPasien:   document.getElementById('kjg-pasien').value,
+    tanggal:      document.getElementById('kjg-tgl').value,
+    jenisLayanan: document.getElementById('kjg-layanan').value,
+    keluhan:      document.getElementById('kjg-keluhan').value,
+    bidan:        document.getElementById('kjg-bidan').value,
+    biaya:        document.getElementById('kjg-biaya').value,
+    idPasien:     'MANUAL',
+  };
+  if (!data.namaPasien) { showToast('Nama pasien wajib diisi', 'error'); return; }
+  api('addKunjungan', data).then(res => {
+    if (res.success) { showToast('Kunjungan berhasil dicatat'); closeModal('modal-kunjungan'); loadAntrian(); loadDashboard(); }
+    else showToast(res.message, 'error');
+  });
+}
+
+function submitPasien() {
+  const data = {
+    nama:        document.getElementById('psn-nama').value,
+    nik:         document.getElementById('psn-nik').value,
+    tanggalLahir:document.getElementById('psn-tgl').value,
+    alamat:      document.getElementById('psn-alamat').value,
+    noHp:        document.getElementById('psn-hp').value,
+    pekerjaan:   document.getElementById('psn-kerja').value,
+    golDarah:    document.getElementById('psn-gol').value,
+    statusBpjs:  document.getElementById('psn-bpjs').value,
+    noBpjs:      document.getElementById('psn-nobpjs').value,
+    catatan:     document.getElementById('psn-catatan').value,
+  };
+  if (!data.nama) { showToast('Nama pasien wajib diisi', 'error'); return; }
+  api('addPasien', data).then(res => {
+    if (res.success) { showToast('Pasien berhasil ditambahkan'); closeModal('modal-pasien'); loadPasien(); }
+    else showToast(res.message, 'error');
+  });
+}
+
+function submitANC() {
+  const data = {
+    namaPasien:    document.getElementById('anc-nama').value,
+    tanggal:       document.getElementById('anc-tgl').value,
+    usiaKehamilan: document.getElementById('anc-uk').value,
+    kunjunganKe:   document.getElementById('anc-kke').value,
+    bb:            document.getElementById('anc-bb').value,
+    tdSistol:      document.getElementById('anc-tds').value,
+    tdDiastol:     document.getElementById('anc-tdd').value,
+    tfu:           document.getElementById('anc-tfu').value,
+    djj:           document.getElementById('anc-djj').value,
+    presentasi:    document.getElementById('anc-pres').value,
+    hb:            document.getElementById('anc-hb').value,
+    komplikasi:    document.getElementById('anc-komp').value,
+    bidan:         document.getElementById('anc-bidan').value,
+    catatan:       document.getElementById('anc-catatan').value,
+    idPasien:      'MANUAL',
+  };
+  if (!data.namaPasien) { showToast('Nama ibu wajib diisi', 'error'); return; }
+  api('addANC', data).then(res => {
+    if (res.success) { showToast('Data ANC berhasil disimpan'); closeModal('modal-anc'); loadANC(); }
+    else showToast(res.message, 'error');
+  });
+}
+
+function submitKB() {
+  const data = {
+    namaPasien:    document.getElementById('kb-nama').value,
+    metodeKB:      document.getElementById('kb-metode').value,
+    tanggalMulai:  document.getElementById('kb-mulai').value,
+    tanggalKontrol:document.getElementById('kb-kontrol').value,
+    efekSamping:   document.getElementById('kb-efek').value,
+    bidan:         document.getElementById('kb-bidan').value,
+    catatan:       document.getElementById('kb-catatan').value,
+    idPasien:      'MANUAL',
+  };
+  if (!data.namaPasien) { showToast('Nama pasien wajib diisi', 'error'); return; }
+  api('addKB', data).then(res => {
+    if (res.success) { showToast('Akseptor KB berhasil ditambahkan'); closeModal('modal-kb'); loadKB(); }
+    else showToast(res.message, 'error');
+  });
+}
+
+function submitImunisasi() {
+  const data = {
+    namaBayi:       document.getElementById('imn-bayi').value,
+    tanggalLahirBayi:document.getElementById('imn-lahir').value,
+    tanggal:        document.getElementById('imn-tgl').value,
+    jenisVaksin:    document.getElementById('imn-vaksin').value,
+    dosisKe:        document.getElementById('imn-dosis').value,
+    batchVaksin:    document.getElementById('imn-batch').value,
+    lokasiSuntik:   document.getElementById('imn-lokasi').value,
+    kipi:           document.getElementById('imn-kipi').value,
+    bidan:          document.getElementById('imn-bidan').value,
+    idPasien:       'MANUAL',
+  };
+  if (!data.namaBayi) { showToast('Nama bayi wajib diisi', 'error'); return; }
+  api('addImunisasi', data).then(res => {
+    if (res.success) { showToast('Data imunisasi berhasil disimpan'); closeModal('modal-imunisasi'); loadImunisasi(); }
+    else showToast(res.message, 'error');
+  });
+}
+
+function submitStok() {
+  const data = {
+    namaItem:  document.getElementById('stk-nama').value,
+    kategori:  document.getElementById('stk-kat').value,
+    satuan:    document.getElementById('stk-sat').value,
+    stokMasuk: document.getElementById('stk-masuk').value,
+    harga:     document.getElementById('stk-harga').value,
+    kadaluarsa:document.getElementById('stk-exp').value,
+    supplier:  document.getElementById('stk-sup').value,
+  };
+  if (!data.namaItem) { showToast('Nama item wajib diisi', 'error'); return; }
+  api('addStok', data).then(res => {
+    if (res.success) { showToast('Stok berhasil ditambahkan'); closeModal('modal-stok'); loadStok(); }
+    else showToast(res.message, 'error');
+  });
+}
+
+function submitKeuangan() {
+  const data = {
+    namaPasien:  document.getElementById('keu-nama').value,
+    tanggal:     document.getElementById('keu-tgl').value,
+    jenisLayanan:document.getElementById('keu-layanan').value,
+    metodeBayar: document.getElementById('keu-metode').value,
+    jumlah:      document.getElementById('keu-jumlah').value,
+    statusBayar: document.getElementById('keu-status').value,
+    noBpjs:      document.getElementById('keu-bpjs').value,
+    catatan:     document.getElementById('keu-catatan').value,
+    idPasien:    'MANUAL',
+  };
+  if (!data.namaPasien || !data.jumlah) { showToast('Nama pasien & jumlah wajib diisi', 'error'); return; }
+  api('addTransaksi', data).then(res => {
+    if (res.success) { showToast('Transaksi berhasil dicatat'); closeModal('modal-keuangan'); loadKeuangan(); }
+    else showToast(res.message, 'error');
+  });
+}
+
+function submitPersalinan() {
+  const data = {
+    namaPasien:   document.getElementById('psl-nama').value,
+    tanggal:      document.getElementById('psl-tgl').value,
+    jam:          document.getElementById('psl-jam').value,
+    jenisPersalinan:document.getElementById('psl-jenis').value,
+    penolong:     document.getElementById('psl-penolong').value,
+    bbBayi:       document.getElementById('psl-bb').value,
+    pbBayi:       document.getElementById('psl-pb').value,
+    jkBayi:       document.getElementById('psl-jk').value,
+    apgar1:       document.getElementById('psl-apgar1').value,
+    apgar5:       document.getElementById('psl-apgar5').value,
+    komplikasiIbu:document.getElementById('psl-kompibu').value,
+    komplikasiBayi:document.getElementById('psl-kompbayi').value,
+    catatan:      document.getElementById('psl-catatan').value,
+    idPasien:     'MANUAL',
+  };
+  if (!data.namaPasien) { showToast('Nama ibu wajib diisi', 'error'); return; }
+  api('addPersalinan', data).then(res => {
+    if (res.success) { showToast('Data persalinan berhasil disimpan'); closeModal('modal-persalinan'); loadPersalinan(); }
+    else showToast(res.message, 'error');
+  });
+}
+
+// ══ PENGATURAN ════════════════════════════════════════════
+function saveApiUrl() {
+  const url = document.getElementById('inp-api-url').value.trim();
+  localStorage.setItem('sipmb_api_url', url);
+  API_URL = url;
+  showToast('URL berhasil disimpan. Memuat ulang data...');
+  setTimeout(() => loadDashboard(), 800);
+}
+
+// ══ HELPER ════════════════════════════════════════════════
+function formatTime(dt) {
+  if (!dt) return '';
+  const t = String(dt).split(' ')[1];
+  return t ? t.substring(0,5) : '';
+}
+
+function formatRp(n) {
+  return 'Rp' + Number(n||0).toLocaleString('id-ID');
+}
+</script>
 </body>
-
 </html>
