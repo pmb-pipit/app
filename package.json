@@ -1,0 +1,24 @@
+{
+  "name": "pmb-pipit",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pmb-pipit/app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/pmb-pipit/app/issues"
+  },
+  "homepage": "https://github.com/pmb-pipit/app#readme",
+  "dependencies": {
+    "@11ty/eleventy": "^3.1.5"
+  }
+}

@@ -1,28 +1,71 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistem Kelola PMB - Bidan Digital</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .sidebar { height: 100vh; background: #2c3e50; color: white; position: fixed; width: 250px; padding-top: 20px; }
-        .sidebar a { color: white; text-decoration: none; padding: 15px 25px; display: block; transition: 0.3s; }
-        .sidebar a:hover { background: #34495e; border-left: 4px solid #1abc9c; }
-        .main-content { margin-left: 250px; padding: 30px; }
-        .card-stat { border: none; border-radius: 10px; transition: transform 0.2s; }
-        .card-stat:hover { transform: translateY(-5px); }
-        .btn-primary { background-color: #1abc9c; border: none; }
-        .btn-primary:hover { background-color: #16a085; }
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .sidebar {
+            height: 100vh;
+            background: #2c3e50;
+            color: white;
+            position: fixed;
+            width: 250px;
+            padding-top: 20px;
+        }
+
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            padding: 15px 25px;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            background: #34495e;
+            border-left: 4px solid #1abc9c;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 30px;
+        }
+
+        .card-stat {
+            border: none;
+            border-radius: 10px;
+            transition: transform 0.2s;
+        }
+
+        .card-stat:hover {
+            transform: translateY(-5px);
+        }
+
+        .btn-primary {
+            background-color: #1abc9c;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #16a085;
+        }
     </style>
 </head>
+
 <body>
 
     <!-- Sidebar -->
     <div class="sidebar">
         <h4 class="text-center mb-4">PMB Digital</h4>
-        <a href="#" onclick="showSection('dashboard')">Dashboard</a>
+        <a href="#" onclick="showSection('dashboard')">Dashboard UTAMA</a>
         <a href="#" onclick="showSection('pendaftaran')">Pendaftaran Pasien</a>
         <a href="#" onclick="showSection('layanan')">Input Layanan</a>
         <a href="#" onclick="showSection('stok')">Stok Obat</a>
@@ -31,7 +74,7 @@
 
     <!-- Main Content -->
     <div class="main-content">
-        
+
         <!-- Dashboard Section -->
         <div id="dashboard" class="content-section">
             <h2 class="mb-4">Dashboard Utama</h2>
@@ -71,7 +114,8 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">NIK Pasien</label>
-                            <input type="text" id="nik" class="form-control" required placeholder="Masukkan 16 digit NIK">
+                            <input type="text" id="nik" class="form-control" required
+                                placeholder="Masukkan 16 digit NIK">
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Nama Lengkap</label>
@@ -117,7 +161,6 @@
                 </table>
             </div>
         </div>
-
     </div>
 
     <script>
@@ -129,7 +172,7 @@
             document.getElementById(id).style.display = 'block';
         }
 
-        document.getElementById('form-pasien').addEventListener('submit', function(e) {
+        document.getElementById('form-pasien').addEventListener('submit', function (e) {
             e.preventDefault();
             const btn = e.target.querySelector('button');
             btn.disabled = true;
@@ -145,7 +188,7 @@
 
             // Simulasi pengiriman (Nanti diganti dengan fetch ke GAS)
             console.log("Data siap dikirim:", data);
-            
+
             /* fetch(APPS_SCRIPT_URL, {
                 method: "POST",
                 body: JSON.stringify(data)
@@ -161,7 +204,7 @@
                 btn.innerText = "Simpan Data Pasien";
             });
             */
-            
+
             setTimeout(() => {
                 alert("Simulasi Berhasil! (Hubungkan URL Apps Script untuk menyimpan sungguhan)");
                 btn.disabled = false;
@@ -173,4 +216,5 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
